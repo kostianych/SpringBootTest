@@ -1,0 +1,958 @@
+{
+  "name": "Notification Domain BWW",
+  "description": null,
+  "widgets": [
+    {
+      "visualization": {
+        "id": "viz.markdown"
+      },
+      "layout": {
+        "column": 1,
+        "row": 1,
+        "height": 1,
+        "width": 12
+      },
+      "title": "",
+      "rawConfiguration": {
+        "text": "___\n# Notification Service BWW"
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.area"
+      },
+      "layout": {
+        "column": 1,
+        "row": 2,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Service : Transactions per second",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": true
+        },
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT rate(count(apm.service.transaction.duration), 1 second) as 'Web throughput' FROM Metric WHERE (appName = 'notification-service-v0-bww-prd01') AND (transactionType = 'Other') AND (transactionName like '%Listener%' and transactionName not like '%WsContextListener%') FACET `transactionName` SINCE 24 HOURS AGO TIMESERIES "
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.area"
+      },
+      "layout": {
+        "column": 5,
+        "row": 2,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Service : Transactions latency",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": true
+        },
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT average(apm.service.transaction.duration) FROM Metric WHERE (appName = 'notification-service-v0-bww-prd01')  AND (transactionType = 'Other') AND (transactionName like '%Listener%' and transactionName not like '%WsContextListener%') FACET `transactionName` SINCE 24 HOURS AGO TIMESERIES "
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.pie"
+      },
+      "layout": {
+        "column": 9,
+        "row": 2,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Service : Piechart for messages volume",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT count(apm.service.transaction.duration) as 'SB listeners' FROM Metric WHERE (appName = 'notification-service-v0-bww-prd01')  AND (transactionType = 'Other') AND (transactionName like '%Listener%' and transactionName not like '%WsContextListener%') FACET transactionName SINCE 24 HOURS AGO  "
+          }
+        ]
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.line"
+      },
+      "layout": {
+        "column": 1,
+        "row": 5,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Service: Errors ",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": false
+        },
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT count(*) FROM TransactionError FACET error.class WHERE (appName = 'notification-service-v0-bww-prd01') AND `error.expected` IS not true TIMESERIES SINCE 24 HOURS AGO"
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.area"
+      },
+      "layout": {
+        "column": 5,
+        "row": 5,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Service : SQL latency",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": false
+        },
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT average(apm.service.datastore.operation.duration) * 1000 FROM Metric WHERE (appName = 'notification-service-v0-bww-prd01') FACET `metricTimesliceName` LIMIT MAX SINCE 24 HOURS AGO TIMESERIES "
+          }
+        ]
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.pie"
+      },
+      "layout": {
+        "column": 9,
+        "row": 5,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Service : Piechart for the errors in the last 30 minutes",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT count(*) FROM TransactionError FACET `error.class` WHERE (appName = 'notification-service-v0-bww-prd01') AND `error.expected` IS not true SINCE 30 MINUTES AGO"
+          }
+        ]
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.line"
+      },
+      "layout": {
+        "column": 1,
+        "row": 8,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Service : order-events-notification DLQ",
+      "rawConfiguration": {
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT max(azure.servicebus.namespaces.deadLetterMessageCount.byQueue) FROM Metric WHERE `azure.resourceName` = 'sbq-ib-ue1-bww-prd01-dp-order-events-notification' TIMESERIES SINCE 24 HOURS ago"
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.line"
+      },
+      "layout": {
+        "column": 5,
+        "row": 8,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Service : order-events-notification Depth",
+      "rawConfiguration": {
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT max(azure.servicebus.namespaces.ActiveMessages.byQueue) FROM Metric WHERE `azure.resourceName` = 'sbq-ib-ue1-bww-prd01-dp-order-events-notification' TIMESERIES SINCE 24 HOURS ago"
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.line"
+      },
+      "layout": {
+        "column": 9,
+        "row": 8,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Service : order-events-notification-priority DLQ",
+      "rawConfiguration": {
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT max(azure.servicebus.namespaces.deadLetterMessageCount.byQueue) FROM Metric WHERE `azure.resourceName` = 'sbq-ib-ue1-bww-prd01-dp-order-events-notification-priority' TIMESERIES SINCE 24 HOURS ago"
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.line"
+      },
+      "layout": {
+        "column": 1,
+        "row": 11,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Service : order-events-notification-priority Depth",
+      "rawConfiguration": {
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT max(azure.servicebus.namespaces.ActiveMessages.byQueue) FROM Metric WHERE `azure.resourceName` = 'sbq-ib-ue1-bww-prd01-dp-order-events-notification-priority' TIMESERIES SINCE 24 HOURS ago"
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.markdown"
+      },
+      "layout": {
+        "column": 1,
+        "row": 14,
+        "height": 1,
+        "width": 12
+      },
+      "title": "",
+      "rawConfiguration": {
+        "text": "___\n# Notification Send Service BWW"
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.area"
+      },
+      "layout": {
+        "column": 1,
+        "row": 15,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Send Service : Transactions per second",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": true
+        },
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT rate(count(apm.service.transaction.duration), 1 second) as 'SB transactions' FROM Metric WHERE (appName = 'notification-send-service-v0-bww-prd01') AND (transactionType = 'Other') AND (transactionName like '%Listener%' and transactionName not like '%WsContextListener%') FACET `transactionName` SINCE 24 HOURS AGO TIMESERIES "
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.area"
+      },
+      "layout": {
+        "column": 5,
+        "row": 15,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Send Service : Transactions latency",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": true
+        },
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT average(apm.service.transaction.duration) FROM Metric WHERE (appName = 'notification-send-service-v0-bww-prd01')  AND (transactionType = 'Other') AND (transactionName like '%Listener%' and transactionName not like '%WsContextListener%') FACET `transactionName` SINCE 24 HOURS AGO TIMESERIES "
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.pie"
+      },
+      "layout": {
+        "column": 9,
+        "row": 15,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Send Service : Piechart for messages volume",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT count(apm.service.transaction.duration) as 'SB listeners' FROM Metric WHERE (appName = 'notification-send-service-v0-bww-prd01')  AND (transactionType = 'Other') AND (transactionName like '%Listener%' and transactionName not like '%WsContextListener%') FACET transactionName SINCE 24 HOURS AGO  "
+          }
+        ]
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.area"
+      },
+      "layout": {
+        "column": 1,
+        "row": 18,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Send Service : SQL latency",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": false
+        },
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT average(apm.service.datastore.operation.duration) * 1000 FROM Metric WHERE (appName = 'notification-send-service-v0-bww-prd01') FACET `metricTimesliceName` LIMIT 5 SINCE 24 HOURS AGO TIMESERIES "
+          }
+        ]
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.line"
+      },
+      "layout": {
+        "column": 5,
+        "row": 18,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Send Service: Errors ",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": false
+        },
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT count(*) FROM TransactionError FACET error.class WHERE (appName = 'notification-send-service-v0-bww-prd01') AND `error.expected` IS not true TIMESERIES SINCE 24 HOURS AGO"
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.pie"
+      },
+      "layout": {
+        "column": 9,
+        "row": 18,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Send Service : Piechart for the errors in the last 30 minutes",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT count(*) FROM TransactionError FACET `error.class` WHERE (appName = 'notification-send-service-v0-bww-prd01') AND `error.expected` IS not true SINCE 30 MINUTES AGO UNTIL 3 MINUTES AGO"
+          }
+        ]
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.line"
+      },
+      "layout": {
+        "column": 1,
+        "row": 21,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Send Service : notification-events-notif-deliveryDLQ",
+      "rawConfiguration": {
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT max(azure.servicebus.namespaces.deadLetterMessageCount.byQueue) FROM Metric WHERE `azure.resourceName` = 'sbq-ib-ue1-bww-prd01-dp-notification-events-notif-delivery' TIMESERIES SINCE 24 HOURS ago"
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.line"
+      },
+      "layout": {
+        "column": 5,
+        "row": 21,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Send Service : notification-events-notif-delivery Depth",
+      "rawConfiguration": {
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT max(azure.servicebus.namespaces.ActiveMessages.byQueue) FROM Metric WHERE `azure.resourceName` = 'sbq-ib-ue1-bww-prd01-dp-notification-events-notif-delivery' TIMESERIES SINCE 24 HOURS ago"
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.line"
+      },
+      "layout": {
+        "column": 9,
+        "row": 21,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Send Service : notification-events-notif-delivery-priority DLQ",
+      "rawConfiguration": {
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT max(azure.servicebus.namespaces.deadLetterMessageCount.byQueue) FROM Metric WHERE `azure.resourceName` = 'sbq-ib-ue1-bww-prd01-dp-notification-events-notif-delivery-priority' TIMESERIES SINCE 24 HOURS ago"
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.line"
+      },
+      "layout": {
+        "column": 1,
+        "row": 24,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Notification Send Service : notification-events-notif-delivery-priority Depth",
+      "rawConfiguration": {
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT max(azure.servicebus.namespaces.ActiveMessages.byQueue) FROM Metric WHERE `azure.resourceName` = 'sbq-ib-ue1-bww-prd01-dp-notification-events-notif-delivery-priority' TIMESERIES SINCE 24 HOURS ago"
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.markdown"
+      },
+      "layout": {
+        "column": 1,
+        "row": 27,
+        "height": 1,
+        "width": 12
+      },
+      "title": "",
+      "rawConfiguration": {
+        "text": "___\n# SFMC Notification Adapter BWW"
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.area"
+      },
+      "layout": {
+        "column": 1,
+        "row": 28,
+        "height": 3,
+        "width": 4
+      },
+      "title": "SFMC-notification-adapter: Transactions per second",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": false
+        },
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "\nSELECT rate(count(apm.service.transaction.duration), 1 second) as 'Web throughput' FROM Metric WHERE (appName = 'sfmc-notification-adapter-v0-bww-prd01') AND (transactionType = 'Web') AND (transactionName not like '%OperationHandler%') FACET `transactionName` SINCE 24 HOURS AGO TIMESERIES "
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.area"
+      },
+      "layout": {
+        "column": 5,
+        "row": 28,
+        "height": 3,
+        "width": 4
+      },
+      "title": "SFMC-notification-adapter: Transactios latency",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": false
+        },
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "\nSELECT average(apm.service.transaction.duration) FROM Metric WHERE (appName = 'sfmc-notification-adapter-v0-bww-prd01') AND (transactionType = 'Web') AND (transactionName not like '%OperationHandler%' and transactionName not like '%WsContextListener%') FACET `transactionName` SINCE 24 HOURS AGO TIMESERIES "
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.pie"
+      },
+      "layout": {
+        "column": 9,
+        "row": 28,
+        "height": 3,
+        "width": 4
+      },
+      "title": "SFMC-notification-adapter: Message volume by API",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": false
+        },
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "\nSELECT count(apm.service.transaction.duration) as 'Web throughput' FROM Metric WHERE (appName = 'sfmc-notification-adapter-v0-bww-prd01') AND (transactionType = 'Web') AND (transactionName not like '%OperationHandler%') FACET transactionName SINCE 24 HOURS AGO "
+          }
+        ]
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.line"
+      },
+      "layout": {
+        "column": 1,
+        "row": 31,
+        "height": 3,
+        "width": 4
+      },
+      "title": "SFMC Notification Adapter: Errors ",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": false
+        },
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT count(*) FROM TransactionError FACET error.class WHERE (appName = 'sfmc-notification-adapter-v0-bww-prd01') AND `error.expected` IS not true TIMESERIES SINCE 24 HOURS AGO"
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.pie"
+      },
+      "layout": {
+        "column": 5,
+        "row": 31,
+        "height": 3,
+        "width": 4
+      },
+      "title": "SFMC Notification Adapter : Piechart for the errors in the last 30 minutes",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT count(*) FROM TransactionError FACET `error.class` WHERE (appName = 'sfmc-notification-adapter-v0-bww-prd01') AND `error.expected` IS not true SINCE 30 MINUTES AGO"
+          }
+        ]
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.area"
+      },
+      "layout": {
+        "column": 9,
+        "row": 31,
+        "height": 3,
+        "width": 4
+      },
+      "title": "SFMC Notification Adapter : SFMC calls latency",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": true
+        },
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT max(apm.service.transaction.external.duration) FROM Metric WHERE (appName = 'sfmc-notification-adapter-v0-bww-prd01') SINCE 24 HOURS AGO TIMESERIES "
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.markdown"
+      },
+      "layout": {
+        "column": 1,
+        "row": 34,
+        "height": 1,
+        "width": 12
+      },
+      "title": "",
+      "rawConfiguration": {
+        "text": "___\n# Twilio Notification Adapter BWW"
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.area"
+      },
+      "layout": {
+        "column": 1,
+        "row": 35,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Twilio-notification-adapter: Transactions per second",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": false
+        },
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "\nSELECT rate(count(apm.service.transaction.duration), 1 second) as 'Web throughput' FROM Metric WHERE (appName = 'twilio-notification-adapter-v0-bww-prd01') AND (transactionType = 'Web') AND (transactionName not like '%OperationHandler%') FACET `transactionName` SINCE 24 HOURS AGO TIMESERIES "
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.area"
+      },
+      "layout": {
+        "column": 5,
+        "row": 35,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Twilio-notification-adapter: Transactios latency",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": false
+        },
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "\nSELECT average(apm.service.transaction.duration) FROM Metric WHERE (appName = 'twilio-notification-adapter-v0-bww-prd01') AND (transactionType = 'Web') AND (transactionName not like '%OperationHandler%' and transactionName not like '%WsContextListener%') FACET `transactionName` SINCE 24 HOURS AGO TIMESERIES "
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.pie"
+      },
+      "layout": {
+        "column": 9,
+        "row": 35,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Twilio-notification-adapter: Message volume by API",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": false
+        },
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "\nSELECT count(apm.service.transaction.duration) as 'Web throughput' FROM Metric WHERE (appName = 'twilio-notification-adapter-v0-bww-prd01') AND (transactionType = 'Web') AND (transactionName not like '%OperationHandler%') FACET transactionName SINCE 24 HOURS AGO "
+          }
+        ]
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.line"
+      },
+      "layout": {
+        "column": 1,
+        "row": 38,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Twilio Notification Adapter: Errors ",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": false
+        },
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT count(*) FROM TransactionError FACET error.class WHERE (appName = 'twilio-notification-adapter-v0-bww-prd01') AND `error.expected` IS not true TIMESERIES SINCE 24 HOURS AGO"
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.pie"
+      },
+      "layout": {
+        "column": 5,
+        "row": 38,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Twilio Notification Adapter : Piechart for the errors in the last 30 minutes",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT count(*) FROM TransactionError FACET `error.class` WHERE (appName = 'twilio-notification-adapter-v0-bww-prd01') AND `error.expected` IS not true SINCE 30 MINUTES AGO"
+          }
+        ]
+      },
+      "linkedEntityGuids": null
+    },
+    {
+      "visualization": {
+        "id": "viz.area"
+      },
+      "layout": {
+        "column": 9,
+        "row": 38,
+        "height": 3,
+        "width": 4
+      },
+      "title": "Twilio Notification Adapter : Twilio calls latency",
+      "rawConfiguration": {
+        "facet": {
+          "showOtherSeries": true
+        },
+        "legend": {
+          "enabled": true
+        },
+        "nrqlQueries": [
+          {
+            "accountId": 2879290,
+            "query": "SELECT max(apm.service.transaction.external.duration) FROM Metric WHERE (appName = 'twilio-notification-adapter-v0-bww-prd01') SINCE 24 HOURS AGO TIMESERIES "
+          }
+        ],
+        "yAxisLeft": {
+          "zero": true
+        }
+      },
+      "linkedEntityGuids": null
+    }
+  ]
+}

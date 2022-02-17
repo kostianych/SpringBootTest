@@ -1,0 +1,429 @@
+{
+	"info": {
+		"_postman_id": "bc54145a-d309-4a5f-969a-8e86427a77c1",
+		"name": "DBBP-40885",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create customer(wallet id in request)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"var responseBody = JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"customer_id\", responseBody.idpCustomerId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "brandId",
+						"value": "BWW",
+						"type": "text"
+					},
+					{
+						"key": "channel-id",
+						"value": "postman",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstName\": \"Kostya\",\r\n  \"lastName\": \"Chyzhykau\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"birthDate\": \"04/02/1981\",\r\n  \"gender\": \"MALE\",\r\n  \"references\": [\r\n    {\r\n      \"type\": \"AUTH0\",\r\n      \"id\": \"b591b3b7-d208-482b-8b47-5a924a628c63\"\r\n    },\r\n    {\r\n      \"type\": \"WALLET\",\r\n      \"id\": \"139ebbef-d28d-40e9-a0eb-63856f9242f1\"\r\n    }\r\n  ],\r\n  \"phones\": [\r\n    {\r\n      \"number\": \"{{$randomPhoneNumber}}\",\r\n      \"isPreferred\": true\r\n    }\r\n  ],\r\n  \"preferences\": {\r\n    \"postalCode\": \"220045\",\r\n    \"marketing\": [\r\n      {\r\n        \"type\": \"EMAIL\"\r\n      }\r\n    ],\r\n    \"locations\": [\r\n      {\r\n        \"id\": \"1111111111\",\r\n        \"isPreferred\": true\r\n      }\r\n    ]\r\n  },\r\n  \"termsAndConditions\": {\r\n    \"type\": \"WEBOA\",\r\n    \"version\": \"1\",\r\n    \"isAccepted\": true,\r\n    \"link\": \"http://mylink\",\r\n    \"acceptedTime\": \"2021-09-06T10:26:32.406Z\"\r\n  },\r\n  \"migrationDetail\": {\r\n    \"isMigrated\": true,\r\n    \"source\": \"FIREBASE\",\r\n    \"memberSince\": \"2021-09-06T10:26:32.406Z\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{customer-domain-service.url}}/customer/v1/brand/{{brand}}/account",
+					"host": [
+						"{{customer-domain-service.url}}"
+					],
+					"path": [
+						"customer",
+						"v1",
+						"brand",
+						"{{brand}}",
+						"account"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check wallet customer references as in request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check customer wallet ref id the same as in request\", function () {\r",
+							"  var walletRef = pm.response.json().references.filter(r => r.type == \"WALLET\")[0];\r",
+							"  pm.expect(walletRef.type).to.eql(\"WALLET\");\r",
+							"  pm.expect(walletRef.id).to.eql(\"139ebbef-d28d-40e9-a0eb-63856f9242f1\");\r",
+							"  \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "channel-id",
+						"value": "swagger",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{customer-retrieval-service.url}}/customer/brand/{{brand}}/account/{{customer_id}}/references",
+					"host": [
+						"{{customer-retrieval-service.url}}"
+					],
+					"path": [
+						"customer",
+						"brand",
+						"{{brand}}",
+						"account",
+						"{{customer_id}}",
+						"references"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create customer(generate wallet id)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseBody = JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"customer_id\", responseBody.idpCustomerId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "brandId",
+						"value": "BWW",
+						"type": "text"
+					},
+					{
+						"key": "channel-id",
+						"value": "postman",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstName\": \"Kostya\",\r\n  \"lastName\": \"Chyzhykau\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"birthDate\": \"04/02/1981\",\r\n  \"gender\": \"MALE\",\r\n  \"references\": [\r\n    {\r\n      \"type\": \"AUTH0\",\r\n      \"id\": \"b591b3b7-d208-482b-8b47-5a924a628c63\"\r\n    }\r\n  ],\r\n  \"phones\": [\r\n    {\r\n      \"number\": \"{{$randomPhoneNumber}}\",\r\n      \"isPreferred\": true\r\n    }\r\n  ],\r\n  \"preferences\": {\r\n    \"postalCode\": \"220045\",\r\n    \"marketing\": [\r\n      {\r\n        \"type\": \"EMAIL\"\r\n      }\r\n    ],\r\n    \"locations\": [\r\n      {\r\n        \"id\": \"1111111111\",\r\n        \"isPreferred\": true\r\n      }\r\n    ]\r\n  },\r\n  \"termsAndConditions\": {\r\n    \"type\": \"WEBOA\",\r\n    \"version\": \"1\",\r\n    \"isAccepted\": true,\r\n    \"link\": \"http://mylink\",\r\n    \"acceptedTime\": \"2021-09-06T10:26:32.406Z\"\r\n  },\r\n  \"migrationDetail\": {\r\n    \"isMigrated\": true,\r\n    \"source\": \"FIREBASE\",\r\n    \"memberSince\": \"2021-09-06T10:26:32.406Z\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{customer-domain-service.url}}/customer/v1/brand/{{brand}}/account",
+					"host": [
+						"{{customer-domain-service.url}}"
+					],
+					"path": [
+						"customer",
+						"v1",
+						"brand",
+						"{{brand}}",
+						"account"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check wallet customer references generated",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check customer wallet ref id is not null\", function () {\r",
+							"  var walletRef = pm.response.json().references.filter(r => r.type == \"WALLET\")[0];\r",
+							"  pm.expect(walletRef.type).to.eql(\"WALLET\");\r",
+							"  pm.expect(walletRef.id).to.not.null;\r",
+							"  pm.collectionVariables.set(\"wallet_id\", walletRef.id);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "channel-id",
+						"value": "swagger",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{customer-retrieval-service.url}}/customer/brand/{{brand}}/account/{{customer_id}}/references",
+					"host": [
+						"{{customer-retrieval-service.url}}"
+					],
+					"path": [
+						"customer",
+						"brand",
+						"{{brand}}",
+						"account",
+						"{{customer_id}}",
+						"references"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get customer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"  pm.collectionVariables.set(\"customer_email\", pm.response.json().email);\r",
+							"  pm.collectionVariables.set(\"customer_phone\", pm.response.json().phones[0].number);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "channel-id",
+						"value": "swagger",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{customer-retrieval-service.url}}/customer/brand/{{brand}}/account/{{customer_id}}",
+					"host": [
+						"{{customer-retrieval-service.url}}"
+					],
+					"path": [
+						"customer",
+						"brand",
+						"{{brand}}",
+						"account",
+						"{{customer_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upsert customer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"  pm.collectionVariables.set(\"customer_id\", pm.response.json().idpCustomerId);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "brandId",
+						"value": "BWW",
+						"type": "text"
+					},
+					{
+						"key": "channel-id",
+						"value": "postman",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstName\": \"Kostya\",\r\n  \"lastName\": \"Chyzhykau\",\r\n  \"email\": \"{{customer_email}}\",\r\n  \"birthDate\": \"04/02/1981\",\r\n  \"gender\": \"MALE\",\r\n  \"references\": [\r\n    {\r\n      \"type\": \"AUTH0\",\r\n      \"id\": \"b591b3b7-d208-482b-8b47-5a924a628c63\"\r\n    },\r\n    {\r\n      \"type\": \"WALLET\",\r\n      \"id\": \"b591b3b7-d208-482b-8b47-5a924a628c63\"\r\n    }\r\n  ],\r\n  \"phones\": [\r\n    {\r\n      \"number\": \"{{customer_phone}}\",\r\n      \"isPreferred\": true\r\n    }\r\n  ],\r\n  \"preferences\": {\r\n    \"postalCode\": \"220045\",\r\n    \"marketing\": [\r\n      {\r\n        \"type\": \"EMAIL\"\r\n      }\r\n    ],\r\n    \"locations\": [\r\n      {\r\n        \"id\": \"1111111111\",\r\n        \"isPreferred\": true\r\n      }\r\n    ]\r\n  },\r\n  \"termsAndConditions\": {\r\n    \"type\": \"WEBOA\",\r\n    \"version\": \"1\",\r\n    \"isAccepted\": true,\r\n    \"link\": \"http://mylink\",\r\n    \"acceptedTime\": \"2021-09-06T10:26:32.406Z\"\r\n  },\r\n  \"migrationDetail\": {\r\n    \"isMigrated\": true,\r\n    \"source\": \"FIREBASE\",\r\n    \"memberSince\": \"2021-09-06T10:26:32.406Z\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{customer-domain-service.url}}/customer/v1/brand/{{brand}}/account",
+					"host": [
+						"{{customer-domain-service.url}}"
+					],
+					"path": [
+						"customer",
+						"v1",
+						"brand",
+						"{{brand}}",
+						"account"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check wallet id reference is not changed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check customer wallet ref id is not changed\", function () {\r",
+							"  var walletRef = pm.response.json().references.filter(r => r.type == \"WALLET\")[0];\r",
+							"  pm.expect(walletRef.type).to.eql(\"WALLET\");\r",
+							"  pm.expect(walletRef.id).to.eql(pm.collectionVariables.get(\"wallet_id\"));\r",
+							"  \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "channel-id",
+						"value": "swagger",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{customer-retrieval-service.url}}/customer/brand/{{brand}}/account/{{customer_id}}/references",
+					"host": [
+						"{{customer-retrieval-service.url}}"
+					],
+					"path": [
+						"customer",
+						"brand",
+						"{{brand}}",
+						"account",
+						"{{customer_id}}",
+						"references"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "customer_id",
+			"value": ""
+		},
+		{
+			"key": "customer_email",
+			"value": ""
+		},
+		{
+			"key": "customer_phone",
+			"value": ""
+		},
+		{
+			"key": "wallet_id",
+			"value": ""
+		}
+	]
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Properties xmlns="http://schemas.microsoft.com/servicebusexplorer">
+  <Property Key="MachineName" Type="String" Value="EPBYMINW0355" />
+  <Property Key="UserName" Type="String" Value="Kanstantsin_Chyzhyka" />
+  <Property Key="ENCODING" Type="String" Value="base64" />
+  <Property Key="COMPRESSION" Type="String" Value="gzip" />
+  <Property Key="SOURCE_CHANNEL" Type="String" Value="WEBOA" />
+  <Property Key="BRAND_ID" Type="String" Value="ARB" />
+  <Property Key="SOURCE_SUB_CHANNEL" Type="String" Value="OFFER_MGT" />
+  <Property Key="EVENT_TYPE" Type="String" Value="OFFER" />
+  <Property Key="EVENT_STATUS" Type="String" Value="DELETED" />
+  <Property Key="MessageId" Type="String" Value="abcdefgh" />
+  <Property Key="EVENT_SUB_TYPE" Type="String" Value="OMS" />
+  <Property Key="trace.id" Type="String" Value="b591b3b7-d208-482b-8b47-5a924a628c63" />
+</Properties>
